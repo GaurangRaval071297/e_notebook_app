@@ -42,7 +42,7 @@ class CommonTextField extends StatelessWidget {
       keyboardType: keyboardType,
       maxLength: maxLength,
       validator: validator,
-      maxLines: effectiveMaxLines,
+      maxLines: maxLine,
       readOnly: readOnly ?? false,
       obscureText: obscureText ?? false,
       textInputAction: inputAction,
