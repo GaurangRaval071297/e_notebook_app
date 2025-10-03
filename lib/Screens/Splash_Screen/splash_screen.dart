@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_notebook_app/Screens/Auth/Login/Login_Screen.dart';
 import 'package:flutter/material.dart';
+import 'package:e_notebook_app/SharedPreference/SharePref.dart';
 import '../Connectivity  Error/connectivity_error_screen.dart';
+import '../Dashboard/home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,34 +18,30 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((
-        List<ConnectivityResult> result,
-        ) {
-      if (result.contains(ConnectivityResult.mobile)) {
-        Timer(
-          Duration(seconds: 3),
-              () => Navigator.pushReplacement(
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) async {
+      if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
+        // Check if user is logged in
+        bool isLoggedIn = await SharedPref.getLoginStatus();
+
+        if (isLoggedIn) {
+          // If logged in, go to Home
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          ),
-        );
-      } else if (result.contains(ConnectivityResult.wifi)) {
-        Timer(
-          Duration(seconds: 3),
-              () => Navigator.pushReplacement(
+            MaterialPageRoute(builder: (context) => const Home()),
+          );
+        } else {
+          // If not logged in, go to Login Screen
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          ),
-        );
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        }
       } else {
-        Timer(
-          Duration(seconds: 3),
-              () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => ConnectivityErrorScreen()),
-          ),
+        // If no connectivity, show error screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ConnectivityErrorScreen()),
         );
       }
     });

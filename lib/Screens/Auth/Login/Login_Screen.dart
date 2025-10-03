@@ -1,3 +1,4 @@
+import 'package:e_notebook_app/SharedPreference/SharePref.dart';
 import 'package:e_notebook_app/Screens/Auth/Register/register_screen.dart';
 import 'package:e_notebook_app/Screens/Dashboard/home.dart';
 import 'package:e_notebook_app/DBHelper/DBHelper.dart';
@@ -43,6 +44,10 @@ class _LoginScreenState extends State<LoginScreen> {
     bool isValid = await dbHelper.validateUser(email, password);
 
     if (isValid) {
+      // Save login status
+      await SharedPref.saveLoginStatus(true);
+      await SharedPref.saveUserEmail(email); // Save email for future reference
+
       // Login successful
       Navigator.pushReplacement(
         context,

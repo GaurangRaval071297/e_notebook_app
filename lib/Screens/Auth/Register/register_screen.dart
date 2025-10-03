@@ -138,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       await _registerUser();
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const Home()),
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
                       );
                     } else {
                       ScaffoldMessenger.of(context)
